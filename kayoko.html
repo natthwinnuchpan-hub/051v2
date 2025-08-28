@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>บอกรัก onikata kayoko</title>
+  <meta name="description" content="เว็บบอกรักแบบเรียบหรู พร้อมพื้นหลังและหัวใจลอย" />
+  
+  <!-- โหลด Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    :root{
+      --accent: #ff6b9e;
+      --accent-2: #8a7bff;
+      --text: #ffffff;
+      --glass: rgba(255,255,255,0.12);
+      --glass-stroke: rgba(255,255,255,0.18);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", sans-serif; color:var(--text); background:#0b0b12; overflow-x:hidden}
+   
+    /* วิดีโอพื้นหลัง */
+    .bg{
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      z-index:-1;
+    }
+    .bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:brightness(.5) saturate(1.2);
+    }
+    .bg::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(1200px 600px at 70% 20%, rgba(255,107,158,.35), transparent 60%),
+                  radial-gradient(900px 600px at 20% 80%, rgba(138,123,255,.35), transparent 60%);
+      mix-blend:multiply;
+    }
+
+    .overlay{position:relative; min-height:100dvh; display:flex; align-items:center; justify-content:flex-end; padding:clamp(16px,3vw,36px)}
+    .card{width:min(600px,90%); background:linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.06)); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid var(--glass-stroke); box-shadow:var(--shadow); border-radius:28px; overflow:hidden; margin-left:auto}
+
+    .hero{position:relative; padding:clamp(24px,4vw,48px); text-align:left}
+    .badge{display:inline-flex; align-items:center; gap:8px; font-size:14px; background:rgba(255,255,255,.12); padding:8px 14px; border-radius:999px; border:1px solid var(--glass-stroke)}
+    
+    /* หัวใจ Gradient + Pulse + Glow */
+    .badge i {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 16px;
+      animation: heartbeat 1.4s infinite;
+      text-shadow: 0 0 8px rgba(255,107,158,.8), 0 0 14px rgba(138,123,255,.8);
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.25); }
+      50% { transform: scale(0.9); }
+      75% { transform: scale(1.15); }
+    }
+
+    h1{font-size:clamp(28px,5vw,56px); margin:16px 0 8px; line-height:1.05}
+    .subtitle{font-size:clamp(14px,2.2vw,18px); opacity:.9}
+
+    .cta{margin-top:20px; display:flex; gap:12px; flex-wrap:wrap}
+    .btn{padding:12px 18px; border-radius:14px; border:1px solid var(--glass-stroke); background:rgba(255,255,255,.1); color:var(--text); font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:10px; cursor:pointer}
+    .btn:hover{background:rgba(255,255,255,.16)}
+
+    .grid{display:grid; grid-template-columns:1fr; gap:clamp(16px,3vw,28px); padding:clamp(16px,4vw,40px)}
+
+    .note{background:rgba(255,255,255,.08); border:1px solid var(--glass-stroke); border-radius:24px; padding:clamp(16px,2.5vw,24px)}
+    .note h2{margin:0 0 10px; font-size:clamp(20px,3vw,28px)}
+    .note p{line-height:1.9; font-size:clamp(14px,2.2vw,17px)}
+
+    .gallery{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+    .photo{position:relative; border-radius:18px; overflow:hidden; border:1px solid var(--glass-stroke); aspect-ratio:4/3; background:#111; cursor:pointer}
+    .photo img{width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.02); cursor:pointer}
+
+    .footer{padding:0 clamp(16px,4vw,40px) clamp(20px,4vw,40px); text-align:center; opacity:.9; font-size:14px}
+
+    /* lightbox */
+    .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.85); display:flex; align-items:center; justify-content:center; visibility:hidden; opacity:0; transition:.3s; z-index:1000}
+    .lightbox.active{visibility:visible; opacity:1}
+    .lightbox img{max-width:90%; max-height:90%; border-radius:16px; box-shadow:0 0 40px rgba(0,0,0,.6)}
+    .lightbox:after{content:"✕"; position:absolute; top:20px; right:30px; font-size:32px; color:#fff; cursor:pointer}
+
+    /* หัวใจลอย */
+    .float-hearts{position:fixed; inset:0; pointer-events:none; overflow:hidden}
+    .float-hearts span{position:absolute; font-size:14px; animation:rise linear forwards; opacity:.9; text-shadow:0 6px 20px rgba(0,0,0,.45)}
+    @keyframes rise{from{transform:translate(var(--x,0),10vh) scale(.8) rotate(0deg); opacity:0}30%{opacity:1}to{transform:translate(var(--x,0),-110vh) scale(1.3) rotate(12deg); opacity:0}}
+
+    .type{display:inline-block; border-right:2px solid rgba(255,255,255,.65); white-space:nowrap; overflow:hidden}
+  </style>
+</head>
+<body>
+  <!-- วิดีโอพื้นหลัง -->
+  <div class="bg" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="Blue Archive - Kayoko (Dress) Live2D.mp4" type="video/mp4" />
+    </video>
+  </div>
+ 
+  <div class="float-hearts" id="floatHearts" aria-hidden="true"></div>
+
+<main class="overlay">
+  <section class="card">
+    <header class="hero">
+      <div class="badge">
+        <i class="fa-solid fa-heart"></i> คำสารภาพรัก
+      </div>
+      <h1><span id="type" class="type">รักนะ KAYOKO ♡</span></h1>
+      <p class="subtitle">
+        ทุกๆวันฉันยิ่งรักเธอมากขึ้นจนรู้สึกว่าถ้าขาดเธอละก็คงเป็นสิ่งที่เลวร้ายในชีวิต — ขอบคุณนะที่เข้ามาเปลี่ยนแปลงโลกที่มืดมนของฉันให้สดใสในทุกๆวัน
+      </p>
+      <div class="cta">
+        <a class="btn" href="#letter">เปิดจดหมายรัก</a>
+        <button class="btn" id="burst">โปรยหัวใจ</button>
+      </div>
+    </header>
+
+      <section class="grid">
+        <article id="letter" class="note">
+          <h2>ถึง Onikata Kayoko</h2>
+          <p>ไม่ว่าจะยาวนานเพียงใด ฉันก็ยังอยากเดินเคียงข้างเธอเหมือนเดิม เสียงหัวเราะของเธอคือเพลงโปรด ประกายในตาของเธอคือแสงดาวของฉัน รอยยิ้มของเธอคือดวงจันทร์ที่ส่องเเสงยามค่ำคืนเเละดวงตะวันอันเจิดจรัส หากวันใดเธอเหนื่อยล้า โปรดจำไว้ว่ายังมีฉันอยู่ตรงนี้พร้อมเป็นที่พักพิงให้เธอเสมอ รักเธอที่สุด ♡</p>
+          <p>ป.ล. เลื่อนลงไปดูรูปสวย ๆ ของเธอได้เลย</p>
+        </article>
+
+        <aside class="note">
+          <h2>แกลเลอรีความทรงจำ</h2>
+          <div class="gallery">
+            <figure class="photo"><img alt="Hina 1" src="kayoko puni.jpg"></figure>
+            <figure class="photo"><img alt="Hina 2" src="Screenshot 2025-08-28 205909.png"></figure>
+            <figure class="photo"><img alt="Hina 3" src="Screenshot 2025-08-28 210018.png"></figure>
+            <figure class="photo"><img alt="Hina 4" src="Screenshot 2025-08-28 210320.png"></figure>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="footer">ทำด้วยใจ ❤ โดย"โอ๊ต" | เเทนความรักที่มีให้"เธอผู้เป็นที่รัก"</footer>
+    </section>
+  </main>
+
+  <!-- lightbox -->
+  <div class="lightbox" id="lightbox"><img src="" alt="expanded"></div>
+
+  <script>
+    // typewriter
+    (function(){const el=document.getElementById('type');const text=el.textContent.trim();el.textContent='';let i=0;const speed=60;const timer=setInterval(()=>{el.textContent+=text.charAt(i);i++;if(i>=text.length){clearInterval(timer);el.style.borderRight='2px solid transparent'}},speed)})();
+
+    // โปรยหัวใจ
+    const hearts=['❤','💗','💖','💘','💕','💓','💝'];
+    const area=document.getElementById('floatHearts');
+    function spawnHeart(x){const s=document.createElement('span');s.textContent=hearts[Math.floor(Math.random()*hearts.length)];const left=(typeof x==='number')?x:Math.random()*window.innerWidth;s.style.left=left+'px';s.style.bottom='-20px';s.style.setProperty('--x',(Math.random()*120-60)+'px');s.style.animationDuration=(4+Math.random()*3)+'s';s.style.fontSize=(14+Math.random()*18)+'px';area.appendChild(s);setTimeout(()=>s.remove(),8000)}
+    let autoRain;function startRain(){if(autoRain) return;autoRain=setInterval(()=>spawnHeart(),350);setTimeout(()=>{clearInterval(autoRain);autoRain=null},4000)}
+    document.getElementById('burst').addEventListener('click',startRain);
+    window.addEventListener('pointerdown',e=>{for(let i=0;i<6;i++) setTimeout(()=>spawnHeart(e.clientX+(Math.random()*40-20)),i*80)});
+
+    // lightbox
+    const lightbox=document.getElementById('lightbox');
+    const lightImg=lightbox.querySelector('img');
+    document.querySelectorAll('.photo img').forEach(img=>{
+      img.addEventListener('click',()=>{
+        lightImg.src=img.src;
+        lightbox.classList.add('active');
+      });
+    });
+    lightbox.addEventListener('click',()=> lightbox.classList.remove('active'));
+  </script>
+</body>
+</html>
+
